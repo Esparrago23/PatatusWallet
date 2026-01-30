@@ -7,11 +7,8 @@ import com.patatus.patatuswallet.features.crypto.domain.repositories.CryptoRepos
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-interface AppContainer {
-    val cryptoRepository: CryptoRepository
-}
 
-class DefaultAppContainer(private val context: Context) : AppContainer {
+class AppContainer( context: Context)  {
 
     private val baseUrl = "https://api.coingecko.com/api/v3/"
 
@@ -26,7 +23,7 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
         retrofit.create(CoinGeckoApi::class.java)
     }
 
-    override val cryptoRepository: CryptoRepository by lazy {
+     val cryptoRepository: CryptoRepository by lazy {
         CryptoRepositoryImpl(coinGeckoApi)
     }
 }
