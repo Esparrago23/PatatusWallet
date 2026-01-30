@@ -9,7 +9,13 @@ class CryptoRepositoryImpl(
     private val api: CoinGeckoApi
 ) : CryptoRepository {
     override suspend fun getCoins(): List<CryptoCoin> {
-        val response = api.getCoins()
+        val response = api.getCoins(
+            currency = "usd",
+            order = "market_cap_desc",
+            perPage = 20,
+            page = 1,
+            sparkline = false
+        )
         return response.map { dto -> dto.toDomain()}
     }
 
