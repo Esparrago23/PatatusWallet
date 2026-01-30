@@ -10,7 +10,7 @@ class CryptoRepositoryImpl(
 ) : CryptoRepository {
     override suspend fun getCoins(): List<CryptoCoin> {
         val response = api.getCoins(
-            currency = "usd",
+            currency = "mxn",
             order = "market_cap_desc",
             perPage = 20,
             page = 1,
