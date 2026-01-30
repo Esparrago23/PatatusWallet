@@ -12,36 +12,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.patatus.patatuswallet.core.ui.theme.PatatusWalletTheme
-
+import android.app.Application
+import com.patatus.patatuswallet.core.di.AppContainer
+import com.patatus.patatuswallet.core.di.DefaultAppContainer
 class MainActivity : ComponentActivity() {
+    lateinit var container: AppContainer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        container = DefaultAppContainer(this)
         enableEdgeToEdge()
         setContent {
             PatatusWalletTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PatatusWalletTheme {
-        Greeting("Android")
-    }
-}
