@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.patatus.patatuswallet.features.crypto.presentation.components.CryptoItem
 import com.patatus.patatuswallet.features.crypto.presentation.viewmodels.CryptoViewModel
 import com.patatus.patatuswallet.features.crypto.presentation.viewmodels.CryptoViewModelFactory
+import com.patatus.patatuswallet.features.crypto.presentation.components.CalculatorDialog
 @Composable
 fun CryptoScreen(
     factory: CryptoViewModelFactory,
@@ -30,6 +32,9 @@ fun CryptoScreen(
 ) {
     val viewModel: CryptoViewModel = viewModel(factory = factory)
     val state by viewModel.uiState.collectAsState()
+    LaunchedEffect (Unit) {
+        viewModel.loadCoins()
+    }
     Scaffold(modifier = modifier.fillMaxSize(),
         topBar = {
             @OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
@@ -59,6 +64,27 @@ fun CryptoScreen(
             if (state.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
+            if (state.coins.isNotEmpty()) {
+                LazyColumn {
+                    items(state.coins) { coin ->
+                        CryptoItem(
+                            coin = coin,
+                            onClick = {
+                                viewModel.onSelectCoinForCalculation(it)
+                            }
+                        )
+                    }
+                }
+            }
+            state.selectedCoinForCalculation?.let { coin ->
+                CalculatorDialog(
+                    coin = coin,
+                    inputAmount = state.calculatorInputAmount,
+                    resultTokens = state.calculatorResultTokens,
+                    onInputChange = { viewModel.onCalculatorInputChange(it) },
+                    onDismiss = { viewModel.onDismissCalculator() }
+                )
+            }
 
             state.error?.let { errorMsg ->
                 Text(
@@ -68,13 +94,7 @@ fun CryptoScreen(
                 )
             }
 
-            if (state.coins.isNotEmpty()) {
-                LazyColumn {
-                    items(state.coins) { coin ->
-                        CryptoItem(coin = coin)
-                    }
-                }
-            }
+
         }
     }
 }

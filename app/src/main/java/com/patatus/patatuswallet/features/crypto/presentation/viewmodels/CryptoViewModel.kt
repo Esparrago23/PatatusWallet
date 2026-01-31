@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
+import com.patatus.patatuswallet.features.crypto.domain.entities.CryptoCoin
 class CryptoViewModel(
     private val getCoinsUseCase: GetCoinsUseCase
 ) : ViewModel() {
@@ -41,6 +41,38 @@ class CryptoViewModel(
                             error = exception.message ?: "Error Escondido"
                         )
                     }
+                )
+            }
+        }
+    }
+
+    fun onSelectCoinForCalculation(coin: CryptoCoin) {
+        _uiState.update {
+            it.copy(
+                selectedCoinForCalculation = coin,
+                calculatorInputAmount = "",
+                calculatorResultTokens = 0.0
+            )
+        }
+    }
+
+
+    fun onDismissCalculator() {
+        _uiState.update { it.copy(selectedCoinForCalculation = null) }
+    }
+
+
+    fun onCalculatorInputChange(input: String) {
+        if (input.all { char -> char.isDigit() || char == '.' }) {
+            _uiState.update { currentState ->
+                val amount = input.toDoubleOrNull() ?: 0.0
+                val price = currentState.selectedCoinForCalculation?.currentPrice ?: 0.0
+
+                val tokens = if (price > 0) amount / price else 0.0
+
+                currentState.copy(
+                    calculatorInputAmount = input,
+                    calculatorResultTokens = tokens
                 )
             }
         }

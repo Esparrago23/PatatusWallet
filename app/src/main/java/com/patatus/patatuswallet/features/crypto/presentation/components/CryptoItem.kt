@@ -29,14 +29,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.patatus.patatuswallet.features.crypto.domain.entities.CryptoCoin
 import java.util.Locale
+import androidx.compose.foundation.clickable
 
 @Composable
 fun CryptoItem(
     coin: CryptoCoin,
+    onClick: (CryptoCoin) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isProfit = coin.priceChangePercentage24h >= 0
@@ -46,7 +47,8 @@ fun CryptoItem(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable { onClick(coin) },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
