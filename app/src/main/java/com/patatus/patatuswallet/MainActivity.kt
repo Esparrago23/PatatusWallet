@@ -11,37 +11,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.patatus.patatuswallet.ui.theme.PatatusWalletTheme
+import com.patatus.patatuswallet.core.ui.theme.PatatusWalletTheme
+import android.app.Application
+import com.patatus.patatuswallet.core.di.AppContainer
+import com.patatus.patatuswallet.features.crypto.di.CryptoModule
+import com.patatus.patatuswallet.features.crypto.presentation.screens.CryptoScreen
+
 
 class MainActivity : ComponentActivity() {
+    lateinit var container: AppContainer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        container = AppContainer(this)
+        val cryptoModule = CryptoModule(container)
         enableEdgeToEdge()
         setContent {
             PatatusWalletTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                CryptoScreen(cryptoModule.provideCoinsViewModelFactory())
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PatatusWalletTheme {
-        Greeting("Android")
-    }
-}
