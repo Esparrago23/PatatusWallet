@@ -2,9 +2,9 @@ package com.patatus.patatuswallet.features.crypto.domain.usecases
 
 import com.patatus.patatuswallet.features.crypto.domain.entities.CryptoCoin
 import com.patatus.patatuswallet.features.crypto.domain.repositories.CryptoRepository
+import javax.inject.Inject
 
-
-class GetCoinsUseCase(
+class GetCoinsUseCase @Inject constructor(
     private val repository: CryptoRepository
 ) {
 

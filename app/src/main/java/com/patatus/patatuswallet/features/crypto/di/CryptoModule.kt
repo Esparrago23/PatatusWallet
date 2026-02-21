@@ -1,18 +1,19 @@
 package com.patatus.patatuswallet.features.crypto.di
 
-import com.patatus.patatuswallet.core.di.AppContainer
-import com.patatus.patatuswallet.features.crypto.domain.usecases.GetCoinsUseCase
-import com.patatus.patatuswallet.features.crypto.presentation.viewmodels.CryptoViewModelFactory
+import com.patatus.patatuswallet.features.crypto.data.repositories.CryptoRepositoryImpl
+import com.patatus.patatuswallet.features.crypto.domain.repositories.CryptoRepository
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
-class CryptoModule(
-    private val appContainer: AppContainer) {
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class CryptoModule{
+    @Binds
+    abstract fun bindGetCoinsRepository(
+        postsRepositoryImpl: CryptoRepositoryImpl
+    ): CryptoRepository
 
-    private fun provideGetCoinsUseCase(): GetCoinsUseCase {
-        return GetCoinsUseCase(appContainer.cryptoRepository)
-    }
-    fun provideCoinsViewModelFactory(): CryptoViewModelFactory {
-        return CryptoViewModelFactory(
-            getCoinsUseCase = provideGetCoinsUseCase()
-        )
-    }
 }
