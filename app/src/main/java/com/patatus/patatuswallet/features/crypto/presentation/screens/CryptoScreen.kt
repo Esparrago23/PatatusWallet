@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -20,18 +21,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.patatus.patatuswallet.features.crypto.presentation.components.CryptoItem
 import com.patatus.patatuswallet.features.crypto.presentation.viewmodels.CryptoViewModel
-import com.patatus.patatuswallet.features.crypto.presentation.viewmodels.CryptoViewModelFactory
 import com.patatus.patatuswallet.features.crypto.presentation.components.CalculatorDialog
 @Composable
-fun CryptoScreen(
-    factory: CryptoViewModelFactory,
-    modifier: Modifier = Modifier
+fun CryptoScreen(viewModel: CryptoViewModel = hiltViewModel(),
+                 modifier: Modifier = Modifier
 ) {
-    val viewModel: CryptoViewModel = viewModel(factory = factory)
-    val state by viewModel.uiState.collectAsState()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect (Unit) {
         viewModel.loadCoins()
     }

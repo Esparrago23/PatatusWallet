@@ -1,7 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.secrets.gradle)
+    alias(libs.plugins.jetbrainsKotlinSerialization)
+    // Activa Hilt y KSP
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -30,14 +34,20 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+
     buildFeatures {
         compose = true
+    }
+}
+ksp {
+    arg("hilt.disableModulesHaveInstallInCheck", "true")
+}
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
     }
 }
 
@@ -50,6 +60,19 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
+    implementation(libs.androidx.compose.ui.text.google.fonts)      // G Fonts
+    implementation(libs.androidx.lifecycle.viewmodel.compose)       // viewModel()
+    implementation(libs.com.squareup.retrofit2.retrofit)            // Retrofit
+    implementation(libs.com.squareup.retrofit2.converter.json)      // JSON
+    implementation(libs.io.coil.kt.coil.compose)                    // Coil
+    implementation(libs.androidx.navigation.compose)                // Navigation
+    implementation(libs.androidx.compose.material.icons.extended)   // Icons extendend
+    implementation(libs.hilt.android)                               // Implementación de Hilt
+    implementation(libs.hilt.navigation.compose)                    // Integración con Jetpack Compose
+    ksp(libs.hilt.compiler)                                         // KSP
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -57,17 +80,4 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    // 1. Retrofit (Para llamar a la API y no morir en el intento)
-    implementation("com.squareup.retrofit2:retrofit:3.0.0")
-    implementation("com.squareup.retrofit2:converter-gson:3.0.0") // Para convertir JSON a Objetos
-
-    // 2. Coil (Para cargar las imágenes de las monedas fácil)
-    implementation("io.coil-kt:coil-compose:2.7.0")
-
-    // 3. ViewModel & LiveData (El cerebro MVVM)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
-
-    // 4. Iconos Material (Para que se vea bonito)
-    implementation("androidx.compose.material:material-icons-extended:1.7.8")
 }

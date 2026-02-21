@@ -1,7 +1,9 @@
-package com.patatus.patatuswallet.core.network
+package com.patatus.patatuswallet.features.crypto.data.datasources.remote.api
 
 import com.patatus.patatuswallet.features.crypto.data.datasources.remote.model.CryptoDto
 import retrofit2.http.GET
+
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface CoinGeckoApi {
