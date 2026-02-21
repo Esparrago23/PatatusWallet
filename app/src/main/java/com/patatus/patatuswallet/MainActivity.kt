@@ -13,21 +13,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.patatus.patatuswallet.core.ui.theme.PatatusWalletTheme
 import android.app.Application
-import com.patatus.patatuswallet.core.di.AppContainer
 import com.patatus.patatuswallet.features.crypto.di.CryptoModule
 import com.patatus.patatuswallet.features.crypto.presentation.screens.CryptoScreen
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    lateinit var container: AppContainer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        container = AppContainer(this)
-        val cryptoModule = CryptoModule(container)
         enableEdgeToEdge()
         setContent {
             PatatusWalletTheme {
-                CryptoScreen(cryptoModule.provideCoinsViewModelFactory())
+                CryptoScreen()
             }
         }
     }
